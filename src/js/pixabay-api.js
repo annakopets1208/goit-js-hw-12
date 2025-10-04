@@ -7,9 +7,7 @@ let page = 1;
 let perPage = 15;
 
 async function getImagesByQuery(query, resetPage = false) {
-  if (resetPage) {
-    page = 1;
-  }
+  if (resetPage) page = 1;
 
   try {
     const response = await axios.get(BASE_URL, {
@@ -24,15 +22,16 @@ async function getImagesByQuery(query, resetPage = false) {
       },
     });
 
+    const { hits, totalHits } = response.data;
     page += 1;
 
-    return response.data.hits;
+    return { hits, totalHits };
   } catch (error) {
     console.error(
       'Sorry, there are no images matching your search query. Please try again!',
       error
     );
-    return [];
+    return { hits: [], totalHits: 0 };
   }
 }
 
